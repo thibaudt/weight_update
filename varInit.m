@@ -1,4 +1,4 @@
-function [W,f,s,t]=varInit(n,t)
+function [W,f,s,t,r]=varInit(n,t)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function initiates the variables needed to compute the evolution
@@ -8,8 +8,8 @@ function [W,f,s,t]=varInit(n,t)
 % N until f converges. t is the number of iterations of the evolution of W
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% N is the number of iterations to let f converge
-N = 200;
+%random base activity vector
+r=rand(n,1);
 
 x=randn(1,n);
 s=zeros(1,n);
@@ -30,7 +30,7 @@ end
 a = sign(x);
 
 Wo=ones(n,1)*a;
-f=zeros(n,N);
+f=zeros(n,2);
 
 
 % is this loop necessary? i.e. shouldnt all diag(W) be 0?
