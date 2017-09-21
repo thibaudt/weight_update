@@ -1,4 +1,4 @@
-function [s] = buildSurplus(W,f,s)
+function [s] = buildSurplus(W,fcol,s)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function constructs a vector from scratch. For each neuron n, it
@@ -11,8 +11,8 @@ function [s] = buildSurplus(W,f,s)
 
 n = size(W,1);
 for i=1:n
-    Ein = dot(W(i,:),f');
-    Eout = dot(W(:,i),f);
+    Ein = dot(W(i,:),fcol');
+    Eout = dot(W(:,i),fcol);
     s(i) = 1 + Ein + Eout;
     if(s(i) < 0)
         s(i) = 0;
