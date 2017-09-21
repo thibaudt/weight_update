@@ -9,15 +9,18 @@ function [W]=iterStat(n,t)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % initialize weight matrix, firing rate vector, and surplus vector
-[W,f,s,t] = varInit(n,t);
+[W,f,s,t,r] = varInit(n,t);
+
+%time step size
+DT = 0.1;
  
 for i=1:t-1
     % returns an n x 1 vector of the convergent firing rate
     % if the firing rate does not converge this function aborts the program
-    f = findConvergence(W(:,:,i),f);
+    fcol = findConvergence(W(:,:,i),f,r);
     
     % set up array of initial surplus energy values for each neuron
-    S = buildSurplus(W(:,:,i),f,s);
+    S = buildSurplus(W(:,:,i),fcol,s);
     
     %calculate sum of weights for each neuron
     nw = neuronWeight(W(:,:,i));
@@ -30,9 +33,9 @@ for i=1:t-1
             % a = S(j)/nw(j); b = S(k)/nw(k); %just to watch them in the
             % workspace
             if (S(j)/nw(j) < S(k)/nw(k))
-                W(j,k,i+1) = W(j,k,i) + abs(W(j,k,i))*(S(j)/nw(j));
+                W(j,k,i+1) = W(j,k,i) + DT*abs(W(j,k,i))*(S(j)/nw(j));
             else
-                W(j,k,i+1) = W(j,k,i) + abs(W(j,k,i))*(S(k)/nw(k));
+                W(j,k,i+1) = W(j,k,i) + DT*abs(W(j,k,i))*(S(k)/nw(k));
             end
         end
     end
