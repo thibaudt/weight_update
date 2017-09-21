@@ -1,4 +1,4 @@
-function [fcolumn]=findConvergence(W,f)
+function [fcol]=findConvergence(W,f,r)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % After setting a desired error rate and alpha, this function uses 
@@ -11,30 +11,15 @@ function [fcolumn]=findConvergence(W,f)
 % set desired error and alpha
 error = 0.0005;
 alpha = 0.95;
-n = size(W,1);
 
+e=1;
 
-% r is a vector of randomly generated initial conditions
-% r has rows equal to rows of W
-r=randn(n,1);
-
-fcolumn = zeros(n,1);
-
-% we iterate for solution to f = g(w*f + r)
-% g = tanh(v)
-for i=1:length(f)-1
-   v=W*f(:,i)+r;
-   f(:,i+1)=alpha*f(:,i)+(1-alpha)*(1+tanh(v))/2;
-   e = abs(minus(f(:,i),f(:,i+1)));      %abs(col of f - next col of f)
-   e = sum(e)/length(W);                          %error = avg error
-   if (e < error)
-       plot(f')
-        fcolumn = f(:,i);
-        return;
-   end
+while e>error
+   f(:,2)=f(:,1);
+   v=W*f(:,2)+r;
+   f(:,1)=alpha*f(:,2)+(1-alpha)*(1+tanh(v))/2;
+   delta = abs(minus(f(:,1),f(:,2))./f(:,2));      %relative error
+   e = max(delta);      %maximum error                   
 end
 
-
-% if f does not converge, plot it and give error
-plot(f');
-warning ('f did not converge properly');
+fcol=f(:,1);
